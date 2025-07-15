@@ -1,0 +1,18 @@
+services:
+  mongo:
+    image: mongo:7
+    container_name: livinvicta-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./data:/data/db
+
+  backend:
+    build: ./src/backend
+    image: livinvicta.com-backend
+    depends_on:
+      - mongo
+
+  frontend:
+    build: ./src/frontend
+    image: livinvicta.com-frontend
