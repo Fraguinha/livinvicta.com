@@ -1,0 +1,42 @@
+networks:
+  livinvictacom-network:
+    name: livinvictacom-network
+services:
+  mongo:
+    image: mongo:7
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./data:/data/db
+    networks:
+      - livinvictacom-network
+
+  backend:
+    build: ./src/backend
+    environment:
+      - DATABASE=mongodb://mongo:27017/livinvicta
+      - NODE_ENV
+      - SECRET
+    depends_on:
+      - mongo
+    networks:
+      - livinvictacom-network
+
+  frontend:
+    build: ./src/frontend
+    depends_on:
+      - backend
+    networks:
+      - livinvictacom-network
+
+  proxy:
+    image: nginx:alpine
+    ports:
+      - "8080:80"
+    volumes:
+      - ./src/proxy/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - backend
+      - frontend
+    networks:
+      - livinvictacom-network
