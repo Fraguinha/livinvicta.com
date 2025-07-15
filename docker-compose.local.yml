@@ -1,0 +1,7 @@
+services:
+  backend:
+    build: ./src/backend
+    image: livinvicta.com-backend
+  frontend:
+    build: ./src/frontend
+    image: livinvicta.com-frontend
