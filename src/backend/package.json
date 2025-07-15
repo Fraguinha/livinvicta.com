@@ -1,0 +1,19 @@
+{
+  "name": "backend",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon --watch . --exec node server.js",
+    "start": "NODE_ENV=production node server.js",
+    "lint": "eslint ."
+  },
+  "devDependencies": {
+    "eslint": "^9.31.0",
+    "nodemon": "^3.1.10"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0"
+  }
+}
