@@ -1,0 +1,82 @@
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImageRepository
+metadata:
+  name: livinvicta-backend-image
+  namespace: flux-system
+spec:
+  image: fraguinha/livinvicta.com-backend
+  interval: 1m0s
+---
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImagePolicy
+metadata:
+  name: livinvicta-backend-policy
+  namespace: flux-system
+spec:
+  digestReflectionPolicy: Always
+  interval: 1m0s
+  imageRepositoryRef:
+    name: livinvicta-backend-image
+  filterTags:
+    pattern: '^latest$'
+  policy:
+    alphabetical:
+      order: asc
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  namespace: livinvicta
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: backend
+          image: fraguinha/livinvicta.com-backend:latest@sha256:54f43f64bb1cb2cf942a74fdf651ddc0786c9dfa9a570dfb6319c8822f2a9534 # {"$imagepolicy": "livinvicta:livinvicta-backend-policy"}
+          ports:
+            - containerPort: 8080
+          env:
+            - name: PORT
+              value: "8080"
+            - name: NODE_ENV
+              value: "production"
+            - name: DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: livinvicta-secrets
+                  key: DATABASE
+            - name: SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: livinvicta-secrets
+                  key: SECRET
+            - name: GOOGLE_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: livinvicta-secrets
+                  key: GOOGLE_CLIENT_ID
+            - name: GOOGLE_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: livinvicta-secrets
+                  key: GOOGLE_CLIENT_SECRET
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+  namespace: livinvicta
+spec:
+  selector:
+    app: backend
+  ports:
+    - port: 8080
+      targetPort: 8080

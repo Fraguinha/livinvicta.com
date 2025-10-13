@@ -1,0 +1,57 @@
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImageRepository
+metadata:
+  name: livinvicta-frontend-image
+  namespace: flux-system
+spec:
+  image: fraguinha/livinvicta.com-frontend
+  interval: 1m0s
+---
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImagePolicy
+metadata:
+  name: livinvicta-frontend-policy
+  namespace: flux-system
+spec:
+  digestReflectionPolicy: Always
+  interval: 1m0s
+  imageRepositoryRef:
+    name: livinvicta-frontend-image
+  filterTags:
+    pattern: '^latest$'
+  policy:
+    alphabetical:
+      order: asc
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  namespace: livinvicta
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+        - name: frontend
+          image: fraguinha/livinvicta.com-frontend:latest@sha256:da20481f6d57095b4b8afeed4792edb48a21e451147d0c34ea18781d93e0fa2a # {"$imagepolicy": "livinvicta:livinvicta-frontend-policy"}
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+  namespace: livinvicta
+spec:
+  selector:
+    app: frontend
+  ports:
+    - port: 8080
+      targetPort: 8080

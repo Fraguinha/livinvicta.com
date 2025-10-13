@@ -1,0 +1,32 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: livinvicta-git
+  namespace: livinvicta
+spec:
+  interval: 1m0s
+  ref:
+    branch: main
+  url: https://github.com/fraguinha/livinvicta.com
+  secretRef:
+    name: git-credentials
+---
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImageUpdateAutomation
+metadata:
+  name: livinvicta-update-automation
+  namespace: livinvicta
+spec:
+  interval: 10m
+  sourceRef:
+    kind: GitRepository
+    name: livinvicta-git
+  git:
+    commit:
+      author:
+        email: fluxcdbot@users.noreply.github.com
+        name: fluxcdbot
+    push:
+      branch: main
+  update:
+    path: ./k8s
