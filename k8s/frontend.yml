@@ -40,7 +40,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: fraguinha/livinvicta.com-frontend:latest@sha256:da20481f6d57095b4b8afeed4792edb48a21e451147d0c34ea18781d93e0fa2a # {"$imagepolicy": "livinvicta:livinvicta-frontend-policy"}
+          image: fraguinha/livinvicta.com-frontend:latest@sha256:2e9f5274be6eac08b190e6d91d50d137d4ebb785cc93c372534f5dd9df360ea6 # {"$imagepolicy": "livinvicta:livinvicta-frontend-policy"}
           ports:
             - containerPort: 8080
 ---
