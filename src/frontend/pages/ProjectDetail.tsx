@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useProjectDetail } from "@/hooks/use-api";
 import { useToast } from "@/hooks/use-toast-context";
 import { ArrowLeft, Calendar, CheckCircle, ChevronLeft, ChevronRight, Home, MapPin } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
 function useImageExistence(project: any) {
@@ -38,6 +38,20 @@ const ProjectDetail = () => {
     const { data: project, isLoading: loading, isError } = useProjectDetail(id);
     const [currentImage, setCurrentImage] = useState(0);
     const { beforeImageExists, afterImageExists } = useImageExistence(project);
+    const thumbnailsContainerRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (thumbnailsContainerRef.current) {
+            const activeThumbnail = thumbnailsContainerRef.current.children[currentImage] as HTMLElement;
+            if (activeThumbnail) {
+                activeThumbnail.scrollIntoView({
+                    behavior: "smooth",
+                    inline: "center",
+                    block: "nearest",
+                });
+            }
+        }
+    }, [currentImage]);
 
     useEffect(() => {
         if (isError) {
@@ -147,7 +161,7 @@ const ProjectDetail = () => {
 
                     {/* Thumbnail Selection */}
                     <div className="flex justify-center">
-                        <div className="flex gap-3 overflow-x-auto p-2">
+                        <div ref={thumbnailsContainerRef} className="flex gap-3 overflow-x-auto p-2">
                             {project.gallery?.map((image: string, index: number) => (
                                 <button
                                     key={index}
