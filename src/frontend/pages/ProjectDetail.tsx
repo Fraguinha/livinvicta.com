@@ -13,8 +13,20 @@ function useImageExistence(project: any) {
     const [afterImageExists, setAfterImageExists] = useState(false);
 
     useEffect(() => {
-        setBeforeImageExists(!!project?.beforeImage);
-        setAfterImageExists(!!project?.afterImage);
+        setBeforeImageExists(false);
+        setAfterImageExists(false);
+        if (project?.beforeImage) {
+            const img = new window.Image();
+            img.src = project?.beforeImage;
+            img.onload = () => setBeforeImageExists(true);
+            img.onerror = () => setBeforeImageExists(false);
+        }
+        if (project?.afterImage) {
+            const img = new window.Image();
+            img.src = project?.afterImage;
+            img.onload = () => setAfterImageExists(true);
+            img.onerror = () => setAfterImageExists(false);
+        }
     }, [project?.beforeImage, project?.afterImage]);
 
     return { beforeImageExists, afterImageExists };
