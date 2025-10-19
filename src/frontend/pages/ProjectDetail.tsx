@@ -146,23 +146,25 @@ const ProjectDetail = () => {
                     </div>
 
                     {/* Thumbnail Selection */}
-                    <div className="flex justify-center gap-3">
-                        {project.gallery?.map((image: string, index: number) => (
-                            <button
-                                key={index}
-                                onClick={() => setCurrentImage(index)}
-                                className={`relative overflow-hidden rounded-lg transition-all duration-200 ${currentImage === index
-                                        ? 'ring-2 ring-primary shadow-lg scale-105'
-                                        : 'hover:scale-105 opacity-70 hover:opacity-100'
-                                    }`}
-                            >
-                                <img
-                                    src={image}
-                                    alt={`Gallery thumbnail ${index + 1}`}
-                                    className="w-20 h-20 object-cover"
-                                />
-                            </button>
-                        ))}
+                    <div className="flex justify-center">
+                        <div className="flex gap-3 overflow-x-auto p-2">
+                            {project.gallery?.map((image: string, index: number) => (
+                                <button
+                                    key={index}
+                                    onClick={() => setCurrentImage(index)}
+                                    className={`relative flex-shrink-0 overflow-hidden rounded-lg transition-all duration-200 ${currentImage === index
+                                            ? 'ring-2 ring-primary shadow-lg scale-105'
+                                            : 'hover:scale-105 opacity-70 hover:opacity-100'
+                                        }`}
+                                >
+                                    <img
+                                        src={image}
+                                        alt={`Gallery thumbnail ${index + 1}`}
+                                        className="w-20 h-20 object-cover"
+                                    />
+                                </button>
+                            ))}
+                        </div>
                     </div>
                 </div>
             </section>
