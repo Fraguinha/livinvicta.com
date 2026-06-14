@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: fraguinha/livinvicta.com-frontend:latest@sha256:286513ef8c963e08750c995c3c6871ea4d4b86f4bc81c13d482e1ff38c37c7db # {"$imagepolicy": "flux-system:livinvicta-frontend-policy"}
+          image: fraguinha/livinvicta.com-frontend:latest@sha256:222dc43a64359524eafca83c255d1b926ad8a393dd51bc66b26e9bf7a9e2d069 # {"$imagepolicy": "flux-system:livinvicta-frontend-policy"}
           ports:
             - containerPort: 8080
 ---
