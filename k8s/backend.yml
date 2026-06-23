@@ -18,6 +18,12 @@ spec:
           image: fraguinha/livinvicta.com-backend:latest@sha256:021876ede4341e2dd7664a0b828206f011b2ca98d0853d496204f649d94123f1 # {"$imagepolicy": "flux-system:livinvicta-backend-policy"}
           ports:
             - containerPort: 8080
+          resources:
+            requests:
+              cpu: 5m
+              memory: 64Mi
+            limits:
+              memory: 96Mi
           env:
             - name: PORT
               value: "8080"
