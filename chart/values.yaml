@@ -1,6 +1,6 @@
 components:
   frontend:
-    image: fraguinha/livinvicta.com-frontend:latest # {"$imagepolicy": "flux-system:livinvicta-frontend-policy"}
+    image: fraguinha/livinvicta.com-frontend:latest@sha256:a883db152c4d183bf086b0ddbd25f2c036b870e7eafd3e48aff2210802c37a02 # {"$imagepolicy": "flux-system:livinvicta-frontend-policy"}
     port: 8080
     replicaCount: 3
     resources:
@@ -10,7 +10,7 @@ components:
       limits:
         memory: 40Mi
   backend:
-    image: fraguinha/livinvicta.com-backend:latest # {"$imagepolicy": "flux-system:livinvicta-backend-policy"}
+    image: fraguinha/livinvicta.com-backend:latest@sha256:021876ede4341e2dd7664a0b828206f011b2ca98d0853d496204f649d94123f1 # {"$imagepolicy": "flux-system:livinvicta-backend-policy"}
     port: 8080
     replicaCount: 3
     env:
@@ -44,7 +44,6 @@ components:
         memory: 64Mi
       limits:
         memory: 96Mi
-
 ingress:
   className: traefik
   clusterIssuer: letsencrypt
