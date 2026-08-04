@@ -1,0 +1,47 @@
+components:
+  frontend:
+    image: k3d-livinvicta-registry:10000/fraguinha/livinvicta.com-frontend:latest
+    port: 8080
+    replicaCount: 1
+  backend:
+    image: k3d-livinvicta-registry:10000/fraguinha/livinvicta.com-backend:latest
+    port: 8080
+    replicaCount: 1
+    env:
+      - name: PORT
+        value: "8080"
+      - name: NODE_ENV
+        value: development
+      - name: DATABASE
+        valueFrom:
+          secretKeyRef:
+            name: livinvicta-secrets
+            key: DATABASE
+      - name: SECRET
+        valueFrom:
+          secretKeyRef:
+            name: livinvicta-secrets
+            key: SECRET
+      - name: GOOGLE_CLIENT_ID
+        valueFrom:
+          secretKeyRef:
+            name: livinvicta-secrets
+            key: GOOGLE_CLIENT_ID
+      - name: GOOGLE_CLIENT_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: livinvicta-secrets
+            key: GOOGLE_CLIENT_SECRET
+ingress:
+  className: traefik
+  clusterIssuer: ""
+  hosts:
+    - localhost
+  tls: null
+  paths:
+    - path: /api
+      pathType: Prefix
+      component: backend
+    - path: /
+      pathType: Prefix
+      component: frontend
